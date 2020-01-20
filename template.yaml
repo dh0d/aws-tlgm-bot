@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  tlgmBotFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: ./app
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      FunctionName: "tlgmFunction"
+      Policies: AmazonDynamoDBFullAccess
+      Events:      
+        BotAPI:
+          Type: Api 
+          Properties:
+            Path: /
+            Method: any
+            RestApiId: !Ref tlgmBotRestApi
+
+  tlgmBotRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: "tlgmBotRestApi"
+      StageName: "v1"
+
+  tlgmUsersTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: "tlgmUsers"
+      PrimaryKey:
+        Name: user_id
+        Type: String
+
+  tlgmSettingsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: "tlgmSettings"
+      PrimaryKey:
+        Name: bot_id
+        Type: Number
+
+Outputs:
+  tlgmBotRestApi:
+    Description: "API Gateway endpoint URL for Telegram webHook"
+    Value: !Sub "https://${tlgmBotRestApi}.execute-api.${AWS::Region}.amazonaws.com/v1"
