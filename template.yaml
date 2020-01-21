@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Description: "Serverless Telegram bot template"
 
 Resources:
   tlgmBotFunction:
@@ -10,6 +11,9 @@ Resources:
       Runtime: python3.6
       FunctionName: "tlgmFunction"
       Policies: AmazonDynamoDBFullAccess
+      Description: "Sample of serverless Telegram bot"
+      Tags: 
+        Env: Dev
       Events:      
         BotAPI:
           Type: Api 
@@ -23,6 +27,8 @@ Resources:
     Properties:
       Name: "tlgmBotRestApi"
       StageName: "v1"
+      Tags: 
+        Env: Dev
 
   tlgmUsersTable:
     Type: AWS::Serverless::SimpleTable
@@ -31,6 +37,8 @@ Resources:
       PrimaryKey:
         Name: user_id
         Type: String
+      Tags: 
+        Env: Dev
 
   tlgmSettingsTable:
     Type: AWS::Serverless::SimpleTable
@@ -39,6 +47,8 @@ Resources:
       PrimaryKey:
         Name: bot_id
         Type: Number
+      Tags: 
+        Env: Dev
 
 Outputs:
   tlgmBotRestApi:
