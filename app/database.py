@@ -14,14 +14,15 @@ class DBProvider():
     def check_user(self, name, passwd):
         status = False
 
-        response = self.user_table.get_item(
-            Key={
-                'user_id': name
-            })
-        if 'Item' in response:
-            item = response['Item']
-            if 'password' in item and item['password'] == passwd:
-                status = True
+        if name and passwd:
+            response = self.user_table.get_item(
+                Key={
+                    'user_id': name
+                })
+            if 'Item' in response:
+                item = response['Item']
+                if 'password' in item and item['password'] == passwd:
+                    status = True
 
         return status
 
